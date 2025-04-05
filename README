@@ -1,0 +1,159 @@
+DEFENDER FOR THE ATARI ST/STE/FALCON
+------------------------------------
+Defender supports Atari ST/STE, Mega ST/STE, and Falcon030 computers
+with at least 1MB RAM.
+
+High quality sound samples are used on machines with DMA sound
+(STE/Falcon) and at least 2MB RAM.
+
+The game may be played with the keyboard, a joystick attached to port 1,
+or a joypad attached to Enhanced Joystick Port 0 (where available).
+
+
+ABOUT DEFENDER
+--------------
+This program is a port of the Williams Defender arcade game, based on
+the published 6809 assembler source code and artistic assets:
+
+www.github.com/Historicalsource/defender
+
+Original game design and programming by Eugene Jarvis, Sam Dicker,
+Larry Demar, Paul Dussault, et al.
+
+Originally produced and Copyright (c) 1980 Williams Electronics, Inc.
+
+
+NON-AFFILIATION STATEMENT
+-------------------------
+This program is not affiliated with Williams Electronics, Inc. in any
+way whatsoever.
+
+The Williams Electronics, Inc. logo and trademark are used under Fair
+Use to preserve the historical accuracy of this port.
+
+Williams Electronics, Inc. has not endorsed, sponsored, nor supported
+the production of this program.
+
+
+ABOUT THE PORT
+--------------
+
+Gameplay
+--------
+This Atari ST port attempts to replicate the original gameplay experience
+by importing as many original game functions and algorithms as possible.
+
+Original gameplay functions were translated from 6809 assembly into
+'C', and modified as required to work in the new environment. Changes
+to constants for framerate-based delays and speeds have been scaled for
+50Hz PAL timing, from their original 60Hz.
+
+Some algorithms related to graphics effects were re-created from scratch
+based on on-screen observation rather than code analysis.
+
+
+Graphics
+--------
+The original Defender's screen bitmap layout is ridiculously well-suited
+to its 8-bit 6809 microprocessor, which allows its 1MHz processor to do
+so much on-screen without hardware support such as hardware scrolling or
+hardware sprites. In contrast, the Atari ST's 16-bit plane-based screen
+requires sprites be shifted and masked onto the screen so as to not
+clobber what is already there. This taxes the ST's 8MHz 16-bit 68000.
+
+At 320x200 4bpp, the Atari ST screen is a good match for Defender, which
+has 320x256 4bpp. Rather than use the standard ST resolution, requiring
+the game playfield be squeezed vertically, lower border overscan is used
+on ST/STE to extend the ST screen. This may result in the very bottom
+of the gameplay area being not visible on some monitors. For monitors
+on which it is visible, the trade-off is worth it. On the Falcon the
+screen is configured with more vertical resolution, and starts a little
+higher on the display for a more centered picture.
+
+
+Sound
+-----
+The Defender hardware includes a separate sound board with its
+own microprocessor and software to generate sounds algorithmically
+(essentially a soft wave generator). The sound board is attached to the
+main 6809 via a parallel port, and the game sends single-byte commands
+to the sound board whenever it wants to play a sound.
+
+In this port, sounds were sampled from the original game and processed
+in two ways:
+    - For the original ST without wave DMA, the samples were converted
+      into YM2149 direct volume samples, using 1, 2, or 3 sound channels
+      depending on the shape of the original wave. For example, sounds
+      based on square waves can be reproduced reasonably using a single
+      YM2149 channel, whereas sounds based on sine waves require multiple
+      channels to reproduce the shapes more accurately.
+      These samples are played using a timer interrupt up to 12.3kHz (i.e.
+      ~12,300 interrupts/sec).
+    - For STE and machines with wave DMA, the samples were used directly,
+      with playback in hardware up to 25kHz.
+
+
+Input/Output
+------------
+Original Defender uses a PIA GPIO port to read joystick/switch positions,
+and saves game settings and high scores to CMOS RAM (essentially a 1980s
+equivalent of what flash memory is today).
+
+For the Atari ST, keyboard or joystick input is via the Intelligent
+Keyboard Controller via its ACIA, joypad input via the Enhanced Joystick
+Port (where available), and configuration and high scores are saved to
+GEMDOS drive.
+
+
+Programming Credits
+-------------------
+Original design and gameplay algorithms:
+    Eugene Jarvis, Sam Dicker, Larry Demar, Paul Dussault, et al.
+
+Atari ST/STE/Falcon platform, graphics, sound, and I/O programming:
+    sark02
+
+If it feels like Defender, then that's because of them. If it doesn't,
+then that's because of me.
+
+
+3rd-Party Code
+--------------
+This program incorporates liblzg by Marcus Geelnard
+(gitlab.com/mbitsnbites/liblzg)
+
+Sound sample conversion utilizes the ym2149_fixed_vol data, created
+by Paulo Simoes, from the Hatari project.
+
+Production Tools
+----------------
+Production of this program made use of the following tools:
+    Microsoft Windows 11 Professional (www.microsoft.com)
+    Ubuntu Linux (ubuntu.com)
+    Crosstool-NG (crosstool-ng.github.io)
+    GNU toolchain (www.gnu.org)
+    Hatari (www.hatari-emu.org)
+    STEEM SSE (sourceforge.net/projects/steemsse)
+    MAME (www.mamedev.org)
+    GIMP (www.gimp.org)
+    Audacity (www.audacityteam.org)
+
+
+Community Play-Testing
+----------------------
+Thanks to the following users from atariage.com and atari-forum.com for
+playtesting and encouragement:
+    Atari030        Eero Tamminen   chronicthehedgehog
+    AtariCrypt      Kroll           danboid
+    Chris23235      Marakatti       darwinmac
+    Cyprian         Philsan         jd
+    DarkLord        Straker         krupkaj
+    DrTypo          TwiliteZoner
+
+
+Free Software
+-------------
+This program is free software.
+
+www.github.com/therealsark02/defender
+

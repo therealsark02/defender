@@ -1,0 +1,187 @@
+I. QUICK START
+==============
+
+Press F1 to start a 1 player game.
+Press F2 to start a 2 player game.
+
+Keyboard controls are:
+  UP         D      FIRE       L
+  DOWN       C      SMART BOMB S
+  THRUST     M      REVERSE    SPACE
+  HYPERSPACE F 
+
+Joystick and Joypad (Jagpad compatible) controllers may be used, if
+configured via the setup (F4) menu.
+
+
+II. PLAYING DEFENDER
+====================
+
+DEFENDER
+--------
+The aim of the game is to defend the ASTRONAUTS on the planet surface.
+
+LANDERs will try to pick them up, and if a LANDER gets to the top of
+the screen with an ASTRONAUT, the LANDER will transform into a MUTANT
+and aggressively attack you.
+
+If you kill a LANDER carrying an ASTRONAUT, the ASTRONAUT will fall.
+An ASTRONAUT can survive a short fall, but will die from a high fall. You
+can catch an ASTRONAUT as it falls, and place them safely back on
+the ground.
+
+If all ASTRONAUTS are lost, the planet explodes and all LANDERs transform
+into MUTANTS and attack you.
+
+BOMBers plant MINES as they fly by, but do not shoot. Avoid the MINES!
+
+PODs are benign until shot, at which point they burst a flock of SWARMERs,
+which will attack you.
+
+Work quickly to kill all the aliens, as if you take too long, UFOs will
+spawn and attack.
+
+SHIP CONTROLS
+-------------
+The arcade controls for your ship are UP and DOWN, THRUST to move forward,
+and REVERSE to change direction.
+
+With a joystick or joypad, LEFT and RIGHT are used instead of THRUST
+and REVERSE, and your ship will turn to face the direction you move
+the joystick.
+
+If you find yourself overwhelmed and need to escape, you can use the
+HYPERSPACE key, which will transport you away to another part of the
+planet. HYPERSPACE is dangerous, and there is a chance that your ship
+will explode when you use it. It is a last resort!
+
+OFFENSE
+-------
+Your primary weapon is your LASER, fired using the FIRE control. The
+LASER will take care of an enemy in your ship's line-of-sight.
+
+A limited number of SMART BOMBs are provided, which will destroy all
+enemies on the screen. Use them wisely.
+
+SCORING AND BONUSES
+-------------------
+Point are scored for killing enemies, and 250 or 500 point bonuses are
+awarded for saving captured ASTRONAUTS.
+
+Every 10,000 points you earn a new ship and a new SMART BOMB.
+
+HIGH SCORES
+-----------
+Two high score tables are maintained:
+  "Today's Greatest" shows the best scores since the program was loaded.
+
+  "All Time Greatest" shows the best scores recorded on the game disk.
+
+If a new high score is good enough to make it onto the All Time list,
+then the new high score table may be saved to the game disk. This can
+be done via the SETUP menus, or, if configured, automatically as soon
+as the high-score is entered.
+
+
+III. CONFIGURATION
+==================
+The SETUP screen is entered using the F4 key. The following configuration
+menu tree is presented:
+
+1. Configure Settings
+   1. Configure Controls
+      1. Change Controller
+      2. Change Key Bindings
+      3. Restore Defaults
+   2. Configure Options
+      1. Auto-Save High Scores
+      2. Setup Menu Font
+   3. Change Directory
+   4. Save Config
+   5. Load Config
+   6. Reset All Config
+2. Manage High Scores
+   1. Save High Scores
+   2. Load High Scores
+   3. Reset High Scores
+
+1. Configure Settings
+---------------------
+Game controls and settings may be modified using these menus.
+
+1.1. Configure Controls
+-----------------------
+The game may be played with:
+    - Keyboard
+    - Joystick
+    - Jagpad or compatible (if avail.)
+
+The available controller options are cycled using:
+    1. Change Controller
+
+Once a controller is selected, the key bindings will be shown on the
+screen, and can be changed using:
+    2. Change Key Bindings
+
+Once Change Key Bindings has been selected, you will be prompted to
+press a key (or joypad button) for each available control input.
+
+To restore the default key bindings for the currently selected controller,
+use:
+    3. Restore Defaults
+
+1.2. Configure Options
+----------------------
+When a new high score is entered, the high-score table can be
+automatically saved to disk using the Auto-Save High Scores option,
+which is toggled using:
+    1. Auto-Save High Scores
+
+The default for this is OFF. When OFF, high scores may be manually saved
+using the Save High Scores menu item under the Manage High Scores menu.
+
+Menus are displayed in the original Defender font. This can be a little
+hard to read, so another font - the Atari 8-Bit font, may be selected
+using the Setup Menu Font toggle:
+    2. Setup Menu Font
+
+3. Change Directory
+-------------------
+The current TOS drive/directory can be changed using this option. This
+can be useful for copying the config or high-score files from another
+disk or directory.
+
+4. Save Config
+5. Load Config
+--------------
+Configuration changes may be saved to disk, or re-loaded from disk using
+these options.
+
+Files are loaded and saved from the current GEMDOS drive/folder, under
+the filename DEFENDER.CFG
+
+6. Reset All Config
+-------------------
+All configuration, including controller and key bindings, may be reset
+back to default with this option.
+
+2. Manage High Scores
+---------------------
+These menus let you load, save, and reset the High Score Table.
+
+The high score table may be saved to disk using:
+    1. Save High Scores
+
+The current GEMDOS drive/directory is used, with the filename
+DEFENDER.HST.
+
+The high score table may be loaded using:
+    2. Load High Scores
+
+Finally, the high score table may be reset back to defaults using:
+    3. Reset High Scores
+
+Note: Upon selecting Reset High Scores, the new high score table is not
+automatically saved to disk even if auto-saving has been enabled in the
+Configure Settings menu.
+

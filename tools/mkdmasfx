@@ -1,0 +1,97 @@
+#!/bin/bash
+
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+# Copyright (c) 2025 sark02
+#
+
+LZG=liblzg/src/tools/lzg
+MKSFX=tools/mksfx/mksfx
+
+mksfx()
+{
+rm -f sfx.toc sfx.dat sfx.tocdat sfx.tocdat.lzg sfx.bin
+rm -rf gen/sfx
+
+mkdir -p gen/sfx
+
+$MKSFX -s -f 12517 -o gen/sfx/wav01.sfx wavs/wav01.wav
+$MKSFX -s -f 25033 -o gen/sfx/wav03.sfx wavs/wav03.wav
+$MKSFX -s -f 25033 -o gen/sfx/wav05.sfx wavs/wav05.wav
+$MKSFX -s -f 12517 -o gen/sfx/wav06.sfx wavs/wav06.wav
+$MKSFX -s -f 12517 -o gen/sfx/wav07.sfx wavs/wav07.wav
+$MKSFX -s -f 12517 -o gen/sfx/wav08.sfx wavs/wav08.wav
+$MKSFX -s -f 25033 -l 1000 -o gen/sfx/wav09.sfx wavs/wav09.wav
+$MKSFX -s -f 12517 -o gen/sfx/wav0a.sfx wavs/wav0a.wav
+$MKSFX -s -f 25033 -o gen/sfx/wav0b.sfx wavs/wav0b.wav
+$MKSFX -s -f 25033 -o gen/sfx/wav0c.sfx wavs/wav0c.wav
+$MKSFX -s -f  6258 -o gen/sfx/wav0e.sfx wavs/wav0e.wav
+$MKSFX -s -f 12517 -l 500 -r -o gen/sfx/wav0f.sfx wavs/wav0f.wav
+$MKSFX -s -f 12517 -o gen/sfx/wav11.sfx wavs/wav11.wav
+$MKSFX -s -f 12517 -l 2500 -o gen/sfx/wav14.sfx wavs/wav14.wav
+$MKSFX -s -f 12517 -o gen/sfx/wav15.sfx wavs/wav15.wav
+$MKSFX -s -f 12517 -l 500 -r -o gen/sfx/wav16.sfx wavs/wav16.wav
+$MKSFX -s -f 12517 -o gen/sfx/wav17.sfx wavs/wav17.wav
+$MKSFX -s -f 25033 -o gen/sfx/wav18.sfx wavs/wav18.wav
+$MKSFX -s -f  6258 -o gen/sfx/wav19.sfx wavs/wav19.wav
+$MKSFX -s -f 25033 -o gen/sfx/wav1a.sfx wavs/wav1a.wav
+$MKSFX -s -f 25033 -o gen/sfx/wav1e.sfx wavs/wav1e.wav
+$MKSFX -s -f 12517 -o gen/sfx/wav1f.sfx wavs/wav1f.wav
+
+# TOC
+# u16: magic            - magic
+# u32: totlen           - total file length
+# u8:  numbersounds     - number of sounds
+# u8:  pad
+#     seq [
+#       u8:  sound      - sound id
+#       u8:  pad
+#       u32: offs       - offset from file (TOC magic)
+#       u32: len        - length of sound object
+#     ] * numsounds
+nsounds=0
+for pass in $(seq 2); do
+    : > sfx.toc
+    : > sfx.dat
+    if [ $pass -eq 1 ]; then
+        offs=8
+    else
+        perl -e "print pack('nNcc', 0xf5a5, 8 + $offs + $nsounds * 10, $nsounds, 0)" >> sfx.toc
+        offs=$((8 + $nsounds * 10))
+    fi
+    for f in gen/sfx/*; do
+        if [ $pass -eq 1 ]; then
+            nsounds=$(($nsounds + 1))
+        fi
+        n=$(expr "$f" : '.*\([0-9a-f][0-9a-f]\)\.sfx')
+        l=$(stat -c '%s' $f)
+        perl -e "print pack('ccNN', 0x$n, 0, $offs, $l)" >> sfx.toc
+        offs=$(($offs + $l))
+        cat $f >> sfx.dat
+        if [ $(($l % 2)) -eq 1 ]; then
+            perl -e "print pack('c', 0)" >> sfx.dat
+            offs=$(($offs + 1))
+        fi
+    done
+done
+cat sfx.toc sfx.dat > sfx.tocdat
+uzlen=$(stat -c '%s' sfx.tocdat)
+if [ $uzlen -ne $offs ]; then
+    echo "BOGON" >&2
+    exit 1
+fi
+$LZG -9 sfx.tocdat sfx.tocdat.lzg
+zlen=$(stat -c '%s' sfx.tocdat.lzg)
+
+# u16: magic (0xe331 for DMA samples)
+# u32: zlen
+# u32: uzlen
+perl -e "print pack('nNN', 0xe331, $zlen, $uzlen)" > sfx.bin
+cat sfx.tocdat.lzg >> sfx.bin
+mv sfx.bin gen/dmasfx.bin
+rm -f sfx.dat sfx.toc sfx.tocdat sfx.tocdat.lzg
+}
+
+( flock 9; mksfx ) 9>>.sfxlck
+

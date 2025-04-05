@@ -1,0 +1,7 @@
+*.o
+*.d
+defender
+defender.st
+defender.tos
+defender.zip
+gen

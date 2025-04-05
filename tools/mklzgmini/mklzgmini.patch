@@ -1,0 +1,20 @@
+*** a/lzgmini_68k.S	2025-03-29 18:31:07.747017109 +0000
+--- b/lzgmini_68k.S	2025-03-29 18:31:56.477012329 +0000
+***************
+*** 65,71 ****
+  	move.b	(%a4)+,%d3
+  	add.w	%d3,%d2
+  	add.w	%d2,%d1
+! 	dbf	%d0,.csloop
+  	swap	%d1
+  	move.w	%d2,%d1
+  	cmp.l	%d6,%d1
+--- 65,72 ----
+  	move.b	(%a4)+,%d3
+  	add.w	%d3,%d2
+  	add.w	%d2,%d1
+! 	subq.l	#1,%d0
+! 	bpl.s	.csloop
+  	swap	%d1
+  	move.w	%d2,%d1
+  	cmp.l	%d6,%d1
