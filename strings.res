@@ -30,7 +30,7 @@ ID_ALL_TIME
 ID_GREATEST
     "GREATEST"
 ID_HOFIN_FMT
-    "%c  %c  %c"
+    "%c\eH\020%c\eH\040%c"
 ID_PLAYER_S
     "PLAYER %s"
 ID_YOU_HAVE_QUALIFIED
