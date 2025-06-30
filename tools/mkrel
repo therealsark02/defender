@@ -29,23 +29,20 @@ outstfile=$8
 outzipfile=$9
 
 # Create .st disk file
-cat << EOF > $HOME/.mtoolsrc
-drive a:
-  file="$(pwd)/$outstfile"
-EOF
+image_opt="-i $outstfile"
 dd if=/dev/zero of=$outstfile bs=1k count=720 status=none
-mformat -f 720 -a a:
+mformat -f 720 -a $image_opt ::
 ./tools/mkdisk.py $boot $outstfile
-mcopy $main a:DEFENDER.TOS
-mcopy $dma a:DMASFX.BIN
-mcopy $psg a:PSGSFX.BIN
-mcopy -t $readme a:README.TXT
-mcopy -t $howto a:HOWTO.TXT
-mcopy -t $license a:LICENSE.TXT
+mcopy $image_opt $main ::DEFENDER.TOS
+mcopy $image_opt $dma ::DMASFX.BIN
+mcopy $image_opt $psg ::PSGSFX.BIN
+mcopy $image_opt -t $readme ::README.TXT
+mcopy $image_opt -t $howto ::HOWTO.TXT
+mcopy $image_opt -t $license ::LICENSE.TXT
 
 # Create .zip file
 mkdir DEFENDER
-mcopy a:DEFENDER.TOS a:DMASFX.BIN a:PSGSFX.BIN a:README.TXT a:HOWTO.TXT a:LICENSE.TXT DEFENDER/
+mcopy $image_opt ::DEFENDER.TOS ::DMASFX.BIN ::PSGSFX.BIN ::README.TXT ::HOWTO.TXT ::LICENSE.TXT DEFENDER/
 rm -f $outzipfile
 zip -q $outzipfile DEFENDER/*
 rm -rf DEFENDER
