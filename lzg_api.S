@@ -26,3 +26,4 @@ LZG_Decode:
 	move.l	(%sp)+,%d2
 	rts
 
+#include "elfattr.S"

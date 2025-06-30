@@ -11,3 +11,4 @@
 mterr:
 	.incbin "gen/mterr.bin"
 
+#include "elfattr.S"

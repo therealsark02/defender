@@ -340,3 +340,4 @@ xbios_wvbl:
 	movem.l	(%sp)+,%d2/%a2
 	rts
 
+#include "elfattr.S"

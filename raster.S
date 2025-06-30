@@ -111,3 +111,4 @@ raster_falcon:
 	bclr.b	#0,MFP_IISA		// end-of-interrupt
 	jmp	schedule
 
+#include "elfattr.S"

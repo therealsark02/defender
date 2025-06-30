@@ -13,3 +13,4 @@ icache_flush:
 	movec	%d0,%cacr
 	rts
 
+#include "elfattr.S"

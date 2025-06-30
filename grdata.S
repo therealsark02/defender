@@ -9,3 +9,5 @@
 	.globl	grdata
 grdata:
 	.incbin "gen/grdata.bin"
+
+#include "elfattr.S"

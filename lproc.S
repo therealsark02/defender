@@ -45,3 +45,4 @@ sucide:
 	move.l	%d0,%a0
 	bra.s	disp2
 
+#include "elfattr.S"

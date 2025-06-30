@@ -96,3 +96,4 @@ loop:
 	movem.l	(%sp)+,%d2-%d7/%a2-%a5
 	rts
 
+#include "elfattr.S"

@@ -22,4 +22,4 @@ while (<>) {
     s/\s+$//;
     print $_ . "\n" if !/^$/;
 }
-
+print STDOUT '#include "../elfattr.S"' . "\n";

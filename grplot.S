@@ -110,3 +110,4 @@ ground_eftab:
 	.long	ger15
 	.long	ger16
 
+#include "elfattr.S"

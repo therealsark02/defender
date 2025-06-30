@@ -30,3 +30,5 @@ invoke_os_hooks:
 	addq.w	#2,%sp
 	movem.l	(%sp)+,%d2-%d7/%a2-%a6
 	rts
+
+#include "elfattr.S"

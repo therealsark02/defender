@@ -161,3 +161,4 @@ sfxplay3pb:
 	move.l	%a0,V_PSG_TIMER
 	sfx_exit
 
+#include "elfattr.S"

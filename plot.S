@@ -253,3 +253,4 @@ spr_collide_half:
 1:
 	rts
 
+#include "elfattr.S"

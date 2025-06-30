@@ -32,3 +32,4 @@ xcpttab:
 	.space	4096
 _xcptsp:
 
+#include "elfattr.S"

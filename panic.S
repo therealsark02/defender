@@ -28,3 +28,4 @@ panic:
 	lea	g_gd,%a6
 	jmp	panic_handler
 
+#include "elfattr.S"

@@ -133,3 +133,4 @@ irq_thread_return:
 	movem.l	(%sp)+,%d0-%d1/%a0-%a1/%a6
 	rte
 
+#include "elfattr.S"

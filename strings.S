@@ -11,3 +11,4 @@
 res_strtab:
 	.incbin "gen/strings.bin"
 
+#include "elfattr.S"

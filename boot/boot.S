@@ -148,3 +148,4 @@ fail_disk_err_msg:
 	.byte	27,'E',27,'Y',32+12,32+20-15
 	.string	"File loading error."
 
+#include "../elfattr.S"

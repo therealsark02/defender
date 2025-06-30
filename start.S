@@ -35,3 +35,4 @@ _start:
 defender_str:
 	.string	"D E F E N D E R"
 
+#include "elfattr.S"
