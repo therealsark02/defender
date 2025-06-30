@@ -13,5 +13,5 @@
 
 const char git_rev[] = STR(GITREV);
 const char build_date[] = STR(BUILDDATE);
-const char version_str[] = "1.00 RELEASE";
+const char version_str[] = "1.01 RELEASE";
 
