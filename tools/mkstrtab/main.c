@@ -17,7 +17,7 @@ static int normalize_buf(sbuf_t *sbuf)
 {
     uint8_t *rp = sbuf->buf;
     uint8_t *wp = sbuf->buf;
-    int c, base, cnt, val;
+    int c, base, cnt, val = 0;
     int state = 0;
     
     // compile the string
