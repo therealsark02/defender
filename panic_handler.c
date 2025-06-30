@@ -24,7 +24,9 @@ uint32_t panic_pc;
 uint32_t panic_aregs[8];
 uint32_t panic_dregs[8];
 extern char _start[];
-extern char _ebss[];
+extern char _end[];
+static char _stack[40960];
+char *_stack_top = &_stack[sizeof(_stack) - 64];
 extern const char git_rev[];
 
 #define EXNAMES_GENERATOR(a, b) [V_##a >> 2] = #a,
@@ -84,12 +86,12 @@ static void panic_dump(void)
     }
     sp = (uint16_t *)panic_aregs[7];
     if (((uint32_t)sp & 1) ||
-        (char *)sp > _end ||
-        (char *)sp < _ebss) {
+        (char *)sp > _stack_top ||
+        (char *)sp < _stack) {
         return;
     }
     gd->panic_row += 2;
-    for (r = 0; (char *)sp < _end && r < 40; r++) {
+    for (r = 0; (char *)sp < _stack_top && r < 40; r++) {
         if ((r & 3) == 0) {
             panic_printf("%a:", sp);
         }

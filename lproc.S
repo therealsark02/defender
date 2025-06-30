@@ -8,7 +8,7 @@
 
 #include "asm_gd.h"
 
-	.extern	_end
+	.extern	_stack_top
 	.extern	kill
 	.extern exec
 
@@ -26,7 +26,7 @@ disp2:
 	move.l	proc_plink(%a0),%a0
 	cmp.w	#0,%a0
 	bne.s	disp1
-	lea	_end,%sp
+	move.l	_stack_top,%sp
 	jmp	exec
 
 	.globl	sleep

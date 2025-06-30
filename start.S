@@ -6,7 +6,13 @@
 
 #include "sysvars.h"
 
-	.section .text
+	.extern	_stack_top
+
+#ifdef __ELF__
+	.section	.text.startup
+#else
+	.text
+#endif
 
 	.globl	_start
 _start:
@@ -19,12 +25,12 @@ _start:
 	// grab the basepage and check
 	// for the boot sector
 	move.l	4(%sp),%a0
+	move.l	_stack_top,%sp
 	pea	0x80(%a0)
 	pea	defender_str
 	jsr	strcmp
 	tst.l	%d0
 	seq	%d7
-	move.l	#_end,%sp
 	move.l	#g_gd,%a6
 	move.l	%d7,-(%sp)
 	jsr	sys_enter

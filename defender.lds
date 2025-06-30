@@ -24,8 +24,6 @@ SECTIONS
 		*(.bss);
 		*(COMMON);
 		. = ALIGN(4);
-		_ebss = .;
-		. = . + 40960; /* 40k stack */
 		_end = ALIGN(4096);
 	}
 }

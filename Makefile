@@ -11,7 +11,7 @@ LD = $(CROSS_COMPILE)ld
 GITREV = $(shell git rev-parse --verify HEAD | cut -c1-8 | tr '[a-z]' '[A-Z]')
 BUILDDATE = "$(shell date '+%d %b %Y')"
 
-CFLAGS = -DM68000 -m68000 --param min-pagesize=0
+CFLAGS = -DM68000 -m68000
 CFLAGS += -O3 -Wall -Werror -Wuninitialized
 CFLAGS += -MMD
 CFLAGS += -fno-builtin -static -ffixed-a6 -fomit-frame-pointer
@@ -22,7 +22,7 @@ CFLAGS += -DBUILDDATE=$(BUILDDATE)
 LDFLAGS = -nostartfiles -nodefaultlibs -nostdlib -static
 
 OBJS = $(addprefix obj/, \
-	astro.o atari_font.o attr_defend.o attr_help.o attr_hof.o \
+	start.o astro.o atari_font.o attr_defend.o attr_help.o attr_hof.o \
 	attr_ledret.o attr_logo.o attr_ramtest.o attract.o bgalt.o blips.o \
 	change_dir.o cmos.o collide.o color.o convert.o data.o defn_font.o \
 	early_irq.o exec.o expl.o fireball.o gemdos.o gexec.o gitrev.o \
@@ -32,7 +32,7 @@ OBJS = $(addprefix obj/, \
 	panic_prf.o player.o plend.o plot.o plstrt.o prdisp.o probe.o proc.o \
 	ramtest.o rand.o raster.o raster_irq.o render_char.o sbomb.o scanner.o \
 	schitzo.o screen.o setup.o sfxplay.o shell.o sinit.o sound.o \
-	sound_dma.o sound_psg.o stars.o start.o strings.o swarmer.o swtch.o \
+	sound_dma.o sound_psg.o stars.o strings.o swarmer.o swtch.o \
 	sys.o tdisp.o terblo.o thread.o thrust.o tie.o timers.o tunes.o ufo.o \
 	vbi_irq.o xcpt.o \
 	)
@@ -48,14 +48,21 @@ defender.st: tools/mkrel boot/boot.bin $(RELEASE_FILES)
 boot/boot.bin:
 	make -C boot
 
+ifeq (,$(findstring m68k-elf-gcc,$(CC)))
+defender.tos: $(OBJS)
+	$(CC) $(LDFLAGS) -s -o $@ $^ -lgcc
+	cp $@ gen
+else
 defender.tos: defender tools/mkprog/mkprog
 	tools/mkprog/mkprog defender -o $@
+	cp $@ gen
 
 tools/mkprog/mkprog:
 	make -C tools/mkprog
 
 defender: $(OBJS)
 	$(CC) $(LDFLAGS) -r -Tdefender.lds -o $@ $^ -lgcc
+endif
 
 obj/%.o: %.S
 	$(CC) -c $(CFLAGS) -o $@ $<
