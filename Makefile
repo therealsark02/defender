@@ -26,7 +26,7 @@ OBJS = $(addprefix obj/, \
 	attr_ledret.o attr_logo.o attr_ramtest.o attract.o bgalt.o blips.o \
 	change_dir.o cmos.o collide.o color.o convert.o data.o defn_font.o \
 	early_irq.o exec.o expl.o fireball.o gemdos.o gexec.o gitrev.o \
-	grdata.o ground.o grplot.o hyper.o icache.o irq.o irq_thread.o \
+	grdata.o ground.o grplot.o hyper.o irq.o irq_thread.o \
 	lander.o laser.o lib.o lproc.o lzg_api.o lzgmini_68k.o main.o mess.o \
 	mkmterr.o mksprites.o mterr.o obj.o os_hooks.o panic.o panic_handler.o \
 	panic_prf.o player.o plend.o plot.o plstrt.o prdisp.o probe.o proc.o \

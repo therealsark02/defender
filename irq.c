@@ -17,6 +17,17 @@
 #include "timers.h"
 #include "irq.h"
 
+static void icache_flush(void)
+{
+	__asm__ __volatile__(
+		"\t.dc.w	0x4e7a,0x0002\n"	// movec	%cacr,%d0
+		"\tor.l		#0x008,%%d0\n"		// Clear I-Cache
+		"\t.dc.w	0x4e7b,0x0002\n"	// movec	%d0,%cacr
+	:
+	:
+	: "d0", "cc", "memory");
+}
+
 static void patch_bra(void *from, void *to)
 {
     short diff = (long)to - (long)from - 2;

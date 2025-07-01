@@ -61,7 +61,5 @@ static inline void writel(uint32_t addr, uint32_t data)
     asm volatile("" ::: "memory");
 }
 
-void icache_flush(void);
-
 #endif
 
