@@ -150,15 +150,13 @@ struct cookie_s {
     uint32_t value;
 };
 
-static int cookie_get(const char *kstr, uint32_t *valp)
+static int cookie_get(uint32_t key, uint32_t *valp)
 {
     const struct cookie_s *p = (struct cookie_s *)_p_cookies;
-    static uint32_t key;
 
     if (p == NULL) {
         return -1;
     }
-    memcpy(&key, kstr, sizeof(key));
     while (p->key != 0) {
         if (p->key == key) {
             *valp = p->value;
@@ -175,7 +173,7 @@ static int get_features(void)
     int unsup = 0;
 
     gd->idata.mach = IDATA_MACH_ST;
-    if (cookie_get("_MCH", &val) == 0) {
+    if (cookie_get(0x5F4D4358UL, &val) == 0) { /* "_MCH" */
         switch (val) {
         case 0x00000:
             break;
@@ -197,13 +195,13 @@ static int get_features(void)
             break;
         }
     }
-    if (cookie_get("_SND", &val) == 0) {
+    if (cookie_get(0x5F534E4DUL, &val) == 0) { /* "_SND" */
         if (val & 0x2) {
             gd->idata.features |= IDATA_FEAT_SDMA;
         }
     }
     gd->idata.cpu = IDATA_CPU_68000;
-    if (cookie_get("_CPU", &val) == 0) {
+    if (cookie_get(0x5F435055UL, &val) == 0) { /* "_CPU" */
         switch (val) {
         case 0:
             break;
@@ -217,7 +215,7 @@ static int get_features(void)
         }
     }
     gd->idata.vid = IDATA_VID_ST;
-    if (cookie_get("_VDO", &val) == 0) {
+    if (cookie_get(0x5F56444FUL, &val) == 0) { /* "_VDO" */
         switch (val >> 16) {
         case 0: // ST video
             break;
