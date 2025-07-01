@@ -107,7 +107,8 @@ static inline xcptfunc_t vector_get(uint32_t vec)
 
 static inline void vector_set(uint32_t vec, xcptfunc_t func)
 {
-    *(void **)vec = func;
+    void **pvec = (void **)vec;
+    *pvec = func;
 }
 #endif
 

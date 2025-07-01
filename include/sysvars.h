@@ -26,7 +26,6 @@
 #ifdef __ASSEMBLER__
 
 	.macro sysvar_assign name value
-    .globl \name
 	.equ \name,\value
 	.endm
 
@@ -37,8 +36,9 @@ SYSVAR_GENERATOR(ASM_SYSVAR_GEN)
 
 #else
 
-#define SYSVAR_DECL_GEN(a, b, c) extern a c;
-SYSVAR_GENERATOR(SYSVAR_DECL_GEN)
+#define phystop    *((uint32_t *)0x42e)
+#define _longframe *((uint16_t *)0x59e)
+#define _p_cookies *((uint32_t *)0x5a0)
 
 #endif
 
