@@ -307,7 +307,6 @@ void sscan(void)
 void key_irq_handler(void)
 {
     uint8_t stat, data;
-    gd_t *gd = &g_gd;
 
     stat = readb(ACIA_KEYB_STAT);
     while (stat & ACIA_RX_INTS) {

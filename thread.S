@@ -16,14 +16,6 @@
 
 	.section .text
 
-	.macro	check_a6
-	cmp.l	#g_gd,%a6
-	beq.s	0f
-	move.l	#0xed2ff434,-(%sp)
-	jsr	panic
-0:
-	.endm
-
 /*
  * VBL Interrupt @ IPL 4
  */
@@ -46,7 +38,6 @@ hwkeyb:
 	addi.b	#1,g_gd+gd_irq_nest		// increment nesting level
 	move.w	#0x2500,%sr		// permit raster+timers
 	movem.l	%d0-%d1/%a0-%a1/%a6,-(%sp)
-	lea	g_gd,%a6
 	jsr	key_irq_handler
 	bclr.b	#6,MFP_IISB		// end-of-interrupt
 	bra	schedule
@@ -58,45 +49,45 @@ hwkeyb:
  */
 	.globl	irq_thread_restore
 irq_thread_restore:
-	check_a6
 	move.w	%sr,-(%sp)		// save sr
 	move.w	#0x2700,%sr		// disable interrupts
-	bset.b	#2,gd_irq_thread_state(%a6)		// disable irq thread
+	lea	g_gd,%a0
+	bset.b	#2,gd_irq_thread_state(%a0)		// disable irq thread
 	tst.b	9(%sp)			// flag non-zero?
 	bne.s	1f			// yes, enable the irq thread
 	rte
 	.globl	irq_thread_restore_long
 irq_thread_restore_long:
-	check_a6
 	move.l	(%sp)+,%d0		// pull return pc
 	clr.w	-(%sp)			// format word
 	move.l	%d0,-(%sp)		// push pc
 	move.w	%sr,-(%sp)		// save sr
 	move.w	#0x2700,%sr		// disable interrupts
-	bset.b	#2,gd_irq_thread_state(%a6)		// disable irq thread
+	lea	g_gd,%a0
+	bset.b	#2,gd_irq_thread_state(%a0)		// disable irq thread
 	tst.b	11(%sp)			// flag non-zero?
 	bne.s	1f			// yes, enable the irq thread
 	rte
 1:
-	bclr.b	#2,gd_irq_thread_state(%a6)		// enable irq thread
+	bclr.b	#2,gd_irq_thread_state(%a0)		// enable irq thread
 	movem.l	%d0-%d1/%a0-%a1/%a6,-(%sp)
-	addi.b	#1,gd_irq_nest(%a6)		// increment irq nesting (for schedule)
+	addi.b	#1,gd_irq_nest(%a0)		// increment irq nesting (for schedule)
 	bra.s	schedule
 
 	.globl	irq_thread_disable
 irq_thread_disable:
-	check_a6
-	btst.b	#2,gd_irq_thread_state(%a6)
+	lea	g_gd,%a0
+	btst.b	#2,gd_irq_thread_state(%a0)
 	seq.b	%d0
-	bset.b	#2,gd_irq_thread_state(%a6)
+	bset.b	#2,gd_irq_thread_state(%a0)
 	rts
 
 // sp -> [d0-d1/a0-a1/a6,sr,pc]
 	.globl	schedule
 schedule:
-	check_a6
+	lea	g_gd,%a0
 	move.w	#0x2700,%sr		// lock-out while deciding
-	sub.w	#1,gd_irq_thread_state(%a6)		// decrement nesting level
+	sub.w	#1,gd_irq_thread_state(%a0)		// decrement nesting level
 	beq.s	invoke_irq_thread
 	// resume current thread (main or irq)
 	movem.l	(%sp)+,%d0-%d1/%a0-%a1/%a6
@@ -105,8 +96,8 @@ schedule:
 	.globl	invoke_irq_thread
 // sp -> [d0-d1/a0-a1/a6,sr,pc]
 invoke_irq_thread:
-	check_a6
-	move.b	#3,gd_irq_thread_state(%a6)		// set enabled/active/~pending
+	lea	g_gd,%a0
+	move.b	#3,gd_irq_thread_state(%a0)		// set enabled/active/~pending
 	pea	irq_thread_return(%pc)
 	move.l	#irq_thread,-(%sp)
 	move.w	#0x2300,-(%sp)		// return with irqs enabled
@@ -114,8 +105,8 @@ invoke_irq_thread:
 
 	.globl	invoke_irq_thread_long
 invoke_irq_thread_long:
-	check_a6
-	move.b	#3,gd_irq_thread_state(%a6)		// set enabled/active/~pending
+	lea	g_gd,%a0
+	move.b	#3,gd_irq_thread_state(%a0)		// set enabled/active/~pending
 	pea	irq_thread_return(%pc)
 	clr.w	-(%sp)			// format word
 	move.l	#irq_thread,-(%sp)
@@ -124,11 +115,11 @@ invoke_irq_thread_long:
 
 // sp -> [d0-d1/a0-a1/a6,sr,pc] (from main_thread)
 irq_thread_return:
-	check_a6
+	lea	g_gd,%a0
 	move.w	#0x2700,%sr		// disable interrupts
-	btst.b	#0,gd_irq_thread_state(%a6)		// irq_thread pending?
+	btst.b	#0,gd_irq_thread_state(%a0)		// irq_thread pending?
 	beq.s	invoke_irq_thread	// yes, invoke irq thread
-	bclr.b	#1,gd_irq_thread_state(%a6)		// clear irq_thread active
+	bclr.b	#1,gd_irq_thread_state(%a0)		// clear irq_thread active
 	// switch to main_thread
 	movem.l	(%sp)+,%d0-%d1/%a0-%a1/%a6
 	rte

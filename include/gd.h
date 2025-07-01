@@ -268,11 +268,7 @@ typedef struct gd_s {
 #define gd_szyv()  ((gd->szyvh << 8) | gd->szyvl)
 
 extern gd_t g_gd;
-#ifdef __MINT__
-extern gd_t *gd;
-#else
-register gd_t *gd asm ("a6");
-#endif
+#define gd (&g_gd)
 
 // status
 #define ST_GAMEOV           0x80

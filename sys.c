@@ -24,9 +24,6 @@
 extern void _start(void);
 
 gd_t g_gd;
-#ifdef __MINT__
-gd_t *gd = &g_gd;
-#endif
 
 static uint16_t os_pal[16];
 

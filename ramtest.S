@@ -20,7 +20,8 @@
 #define ycnt	%d5
 
 ramtest_step:
-	movem.l	%d2-%d7/%a2-%a5,-(%sp)
+	movem.l	%d2-%d7/%a2-%a6,-(%sp)
+	lea	g_gd,%a6
 	move.l	gd_crproc(%a6),%a5
 	move.l	proc_ramtest_colptr0(%a5),colptr0
 	move.l	proc_ramtest_colptr1(%a5),colptr1
@@ -93,7 +94,7 @@ loop:
 	move.b	A,proc_ramtest_a(%a5)
 	move.b	B,proc_ramtest_b(%a5)
 
-	movem.l	(%sp)+,%d2-%d7/%a2-%a5
+	movem.l	(%sp)+,%d2-%d7/%a2-%a6
 	rts
 
 #include "elfattr.S"

@@ -12,9 +12,9 @@ GITREV = $(shell git rev-parse --verify HEAD | cut -c1-8 | tr '[a-z]' '[A-Z]')
 BUILDDATE = "$(shell date '+%d %b %Y')"
 
 CFLAGS = -DM68000 -m68000
-CFLAGS += -O3 -Wall -Werror -Wuninitialized
+CFLAGS += -O2 -Wall -Werror -Wuninitialized
 CFLAGS += -MMD
-CFLAGS += -fno-builtin -static -ffixed-a6 -fomit-frame-pointer
+CFLAGS += -fno-builtin -static -fomit-frame-pointer
 CFLAGS += -Iinclude -Igen -Iliblzg/src/include
 CFLAGS += -DGITREV=$(GITREV)
 CFLAGS += -DBUILDDATE=$(BUILDDATE)
@@ -53,6 +53,7 @@ defender.tos: $(OBJS)
 	$(CC) $(LDFLAGS) -s -o $@ $^ -lgcc
 	cp $@ gen
 else
+CFLAGS += --param min-pagesize=0
 defender.tos: defender tools/mkprog/mkprog
 	tools/mkprog/mkprog defender -o $@
 	cp $@ gen
