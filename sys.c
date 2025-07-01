@@ -114,16 +114,16 @@ static void prf(const char *fmt, ...)
                 gemdos_cconout(c);
                 break;
             case 'c':
-                gemdos_cconout(va_arg(ap, uint32_t));
+                gemdos_cconout(va_arg(ap, int));
                 break;
             case 'n':
                 u4out(va_arg(ap, uint32_t));
                 break;
             case 'b':
-                u8out(va_arg(ap, uint32_t));
+                u8out(va_arg(ap, unsigned int));
                 break;
             case 'w':
-                u16out(va_arg(ap, uint32_t));
+                u16out(va_arg(ap, unsigned int));
                 break;
             case 'l':
                 u32out(va_arg(ap, uint32_t));
@@ -132,7 +132,7 @@ static void prf(const char *fmt, ...)
                 strout(va_arg(ap, char *));
                 break;
             case 'u':
-                decout(va_arg(ap, uint32_t));
+                decout(va_arg(ap, unsigned int));
                 break;
             default:
                 gemdos_cconout('?');

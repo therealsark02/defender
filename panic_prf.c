@@ -106,13 +106,13 @@ void panic_printf(const char *fmt, ...)
                 charout(va_arg(ap, uint32_t));
                 break;
             case 'n':
-                u4out(va_arg(ap, uint32_t));
+                u4out(va_arg(ap, int));
                 break;
             case 'b':
-                u8out(va_arg(ap, uint32_t));
+                u8out(va_arg(ap, int));
                 break;
             case 'w':
-                u16out(va_arg(ap, uint32_t));
+                u16out(va_arg(ap, int));
                 break;
             case 'a':
                 u24out(va_arg(ap, uint32_t));
