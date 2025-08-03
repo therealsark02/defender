@@ -20,6 +20,7 @@
 #include "stars.h"
 #include "shell.h"
 #include "color.h"
+#include "sysvars.h"
 #include "irq_thread.h"
 
 static void grid(void)
@@ -29,20 +30,20 @@ static void grid(void)
     const int plane = 1;
 
     if (gd->want_grid) {
-        for (p = (uint16_t *)gd->vid_base + plane; p < (uint16_t *)0x100000; p += 4) {
+        for (p = (uint16_t *)gd->vid_base + plane; p < (uint16_t *)phystop; p += 4) {
             *p |= 0x8000;
         }
-        for (p = (uint16_t *)gd->vid_base + 80 * 9 + plane; p < (uint16_t *)0x100000; p += (16 * 80)) {
+        for (p = (uint16_t *)gd->vid_base + 80 * 9 + plane; p < (uint16_t *)phystop; p += (16 * 80)) {
             for (i = 0; i < 80; i += 4) {
                 p[i] = 0xffff;
             }
         }
         gd->grid_on = 1;
     } else if (gd->grid_on) {
-        for (p = (uint16_t *)gd->vid_base + plane; p < (uint16_t *)0x100000; p += 4) {
+        for (p = (uint16_t *)gd->vid_base + plane; p < (uint16_t *)phystop; p += 4) {
             *p &= 0x7fff;
         }
-        for (p = (uint16_t *)gd->vid_base + 80 * 9 + plane; p < (uint16_t *)0x100000; p += (16 * 80)) {
+        for (p = (uint16_t *)gd->vid_base + 80 * 9 + plane; p < (uint16_t *)phystop; p += (16 * 80)) {
             for (i = 0; i < 80; i += 4) {
                 p[i] = 0;
             }
