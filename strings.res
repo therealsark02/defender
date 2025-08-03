@@ -261,6 +261,12 @@ ID_LICENSE
     "License"
 ID_SYSTEM_INFORMATION
     "System Information"
+ID_OVERSCAN_TEST
+    "Overscan Test"
+ID_OVERSCAN_TEST_TEXT
+    "Adjust your monitor so that the\r\n"
+    "green rectangle is completely\r\n"
+    "visible.\r\n"
 ID_DEVELOPER_MENU
     "Developer Menu"
 ID_MEMORY_INFO

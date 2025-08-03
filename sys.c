@@ -312,13 +312,13 @@ static void setup_game_screen(void)
         vdb = readw(0xff82a8);
         vde = readw(0xff82aa);
         if (gd->os_mon_type == 2) {
-            vdb -= 80;
-            vde += 80;
+            vdb -= 82;
+            vde += 82;
             writew(0xff82a6, vdb);
             writew(0xff82a4, vde);
         } else {
-            vdb -= 20;
-            vde += 60;
+            vdb -= 21;
+            vde += 61;
         }
         writew(0xff82a8, vdb);
         writew(0xff82aa, vde);

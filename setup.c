@@ -568,6 +568,63 @@ static void sys_info(uint8_t id)
     setup_getnumkey(0);
 }
 
+static void draw_overscan_extents(void)
+{
+    const int ylast = YMAX + 8 - 1;   // 8 is the tallest obj
+    uint16_t *wpt, *wpb;
+    uint16_t lval, rval;
+    int i, loffs, roffs;
+
+    // horizontals
+    wpt = SCRPTR(16, 0);
+    wpb = SCRPTR(16, ylast);
+    for (i = 0; i < 72; i += 4) {
+        wpt[1 + i] = 0xffff;
+        wpb[1 + i] = 0xffff;
+    }
+
+    // verticals
+    wpb = SCRPTR(0, ylast);
+    for (wpt = SCRPTR(16, 0) + 80; wpt < wpb; wpt += 80) {
+        wpt[1] = 0x8000;
+        wpt[69] = 0x0001;
+    }
+
+    // diagonals
+    wpt = SCRPTR(16, 0);
+    wpb = SCRPTR(16, ylast);
+    lval = 0x0001;
+    rval = 0x8000;
+    loffs = 1 + 8;
+    roffs = 69 - 8;
+    for (i = 0; i < 48; i++) {
+        wpt[loffs] |= lval;
+        wpt[roffs] |= rval;
+        wpb[loffs] |= lval;
+        wpb[roffs] |= rval;
+        lval <<= 1;
+        rval >>= 1;
+        if (lval == 0) {
+            lval = 0x0001;
+            rval = 0x8000;
+            loffs -= 4;
+            roffs += 4;
+        }
+        wpt += 80;
+        wpb -= 80;
+    }
+}
+
+static void overscan_test(uint8_t id)
+{
+    scrclr();
+    draw_overscan_extents();
+    setup_title(ID_OVERSCAN_TEST);
+    messf(32, 100, ID_OVERSCAN_TEST_TEXT); /* 50 */
+    messf(48, gd->curser_y + 20, ID_BACK);
+    setup_getnumkey(0);
+}
+
 static void quit_program(uint8_t id)
 {
     sys_exit();
@@ -632,6 +689,7 @@ static const mitem_t root_items[] = {
     ITEM_FUNC(ID_ITEM_CREDITS,              credits),
     ITEM_FUNC(ID_LICENSE,                   license),
     ITEM_FUNC(ID_SYSTEM_INFORMATION,        sys_info),
+    ITEM_FUNC(ID_OVERSCAN_TEST,             overscan_test),
     ITEM_FUNC_APPONLY(ID_QUIT_PROGRAM,      quit_program),
     ITEM_MENU_DEVONLY(ID_DEVELOPER_MENU,    &dev_menu),
 };
@@ -645,7 +703,8 @@ void enter_setup(void)
     gd->status = 0xff;
     flags = irq_thread_disable();
     expu();
-    pcram[1] = 0xa5;
+    pcram[1] = 0xa5;    // 10_100_101 text
+    pcram[2] = 0x28;    // 00_101_000 line
     colr_apply();
     gd->font = (cfg.setup_font == CFG_FONT_ATARI) ? &atari_font : &defender_font;
     menu_run(&root_menu, ID_DEFENDER_SETUP);
