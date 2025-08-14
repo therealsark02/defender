@@ -10,6 +10,7 @@ LD = $(CROSS_COMPILE)ld
 
 GITREV = $(shell git rev-parse --verify HEAD | cut -c1-8 | tr '[a-z]' '[A-Z]')
 BUILDDATE = "$(shell date '+%d %b %Y')"
+RELNAME = "$(shell tools/mkrelname)"
 
 CFLAGS = -DM68000 -m68000 --param min-pagesize=0
 CFLAGS += -O3 -Wall -Werror -Wuninitialized
@@ -18,6 +19,7 @@ CFLAGS += -fno-builtin -static -ffixed-a6 -fomit-frame-pointer
 CFLAGS += -Iinclude -Igen -Iliblzg/src/include
 CFLAGS += -DGITREV=$(GITREV)
 CFLAGS += -DBUILDDATE=$(BUILDDATE)
+CFLAGS += -DRELNAME=$(RELNAME)
 
 LDFLAGS = -nostartfiles -nodefaultlibs -nostdlib -static
 
