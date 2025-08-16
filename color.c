@@ -98,6 +98,9 @@ void crinit(void)
     for (i = 0; i < 16; i++) {
         pcram[i] = crtab[i];
     }
+    if (gd->cheats) {
+        pcram[0] = 0x01;
+    }
     colr_apply();
 }
 
