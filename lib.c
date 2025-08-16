@@ -116,12 +116,6 @@ void *memset(void *dst, int c, uint32_t size)
     uint32_t *ldst = dst;
     uint32_t *e_ldst;
     uint32_t ldata;
-    uint32_t osize;
-    uint8_t xx;
-
-    osize = size;
-    *((uint8_t *)dst + size - 1) = 0xef;
-    xx = *((uint8_t *)dst + size);
 
     if (((uint32_t)dst & 0x1) == 0) {
         // dst aligned
@@ -140,10 +134,6 @@ void *memset(void *dst, int c, uint32_t size)
     while (bdst != e_bdst) {
         *bdst++ = (uint8_t)c;
     }
-    if (*((uint8_t *)dst + osize - 1) != (uint8_t)c ||
-        *((uint8_t *)dst + osize) != xx) {
-        panic(0xdac2bad0);
-    }
     return dst;
 }
 
@@ -155,12 +145,6 @@ void *memcpy(void *dst, const void *src, uint32_t size)
     uint32_t *ldst = dst;
     const uint8_t *bsrc;
     uint32_t *e_ldst;
-    uint32_t osize;
-    uint8_t xx;
-
-    osize = size;
-    *((uint8_t *)dst + size - 1) = 0xef;
-    xx = *((uint8_t *)dst + size);
 
     if ((((uint32_t)dst | (uint32_t)src) & 0x1) == 0) {
         // src & dst aligned
@@ -175,10 +159,6 @@ void *memcpy(void *dst, const void *src, uint32_t size)
     e_bdst = bdst + size;
     while (bdst != e_bdst) {
         *bdst++ = *bsrc++;
-    }
-    if (*((uint8_t *)dst + osize - 1) == 0xef ||
-        *((uint8_t *)dst + osize) != xx) {
-        panic(0xdac2bad1);
     }
     return dst;
 }
