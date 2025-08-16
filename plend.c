@@ -11,6 +11,7 @@
 #include "gd.h"
 #include "sprites.h"
 #include "screen.h"
+#include "plot.h"
 #include "plstrt.h"
 #include "gexec.h"
 #include "color.h"
@@ -267,7 +268,9 @@ void plend(void)
     
     stchk0(0x58);
     gd->bglx = gd->bgl;
-    blkclr(gd->plascrx, gd->playc, 16, 6);
+    if (gd->opldst) {
+        erase_2x6_full(gd->opldst, gd->oplsrc);
+    }
     plsav();
     sndld(pdsnd);
 
