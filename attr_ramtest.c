@@ -14,6 +14,7 @@
 #include "mess.h"
 #include "attract.h"
 
+void ramtest_scrinit(void);
 void ramtest_step(void);
 
 #define sleep(a, b) attr_sleep((a), (b))
@@ -97,6 +98,7 @@ void ramtest(void)
         col = (col * 0xb5) >> 8;
     }
     colr_apply();
+    ramtest_scrinit();
     p->ramtest.x = 16;
     ramtest_setscr();
     p->ramtest.cnt = 2;

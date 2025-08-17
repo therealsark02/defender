@@ -5,6 +5,7 @@
  */
 
 #include "asm_gd.h"
+#include "screen.h"
 
 	.section .text
 
@@ -28,7 +29,7 @@ ramtest_step:
 	move.l	proc_ramtest_mask(%a5),mask
 	move.b	proc_ramtest_a(%a5),A
 	move.b	proc_ramtest_b(%a5),B
-	moveq	#(240-7)/2,ycnt
+	moveq	#(246-7)/2,ycnt
 loop:
 	move.b	B,%d7
 	not.b	%d7
@@ -94,5 +95,25 @@ loop:
 	move.b	B,proc_ramtest_b(%a5)
 
 	movem.l	(%sp)+,%d2-%d7/%a2-%a5
+	rts
+
+	// initialize the screen to all blue
+	.globl	ramtest_scrinit
+ramtest_scrinit:
+	move.l	%d2,-(%sp)
+	move.l	gd_vid_base(%a6),%a0
+	addq	#8,%a0
+	move.l	#SCREEN_HEIGHT-6,%d0
+	move.l	#0xffff0000,%d1
+	moveq	#0,%d2
+0:
+	move.l	%a0,%a1
+	.rept	SCREEN_COLS-2
+	move.l	%d1,(%a1)+
+	move.l	%d2,(%a1)+
+	.endr
+	add.l	#160,%a0
+	dbra	%d0,0b
+	move.l	(%sp)+,%d2
 	rts
 
