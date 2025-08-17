@@ -33,7 +33,7 @@ static void build_col8to12(void)
         b = (c >> 6) & 0x3;         // bb------
         g = (c >> 3) & 0x7;         // --ggg---
         r = (c >> 0) & 0x7;         // -----rrr
-        b = (b << 1) | (b == 3);
+        b = (b << 1) | (b > 1);
         col8to12[c] = (r << 8) | (g << 4)| b;
     }
 }
